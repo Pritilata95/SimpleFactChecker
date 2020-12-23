@@ -1,7 +1,5 @@
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 /*
@@ -25,9 +23,11 @@ public class Main {
 			for(String key:keys)
 				System.out.println("Fact ID:"+key+"\tFact Statement:"+FC.statement_map.get(key)+"\tFact Value:"+FC.statement_value.get(key));
 			
-			//Tokenizer
-		     String text = "The Demolished Man's author is E. E. Smith";
-		     System.out.println(Arrays.toString(FC.tokenize(text)));
+//		     String text = "The Demolished Man's author is E. E. Smith";
+//		     String text = "Camp Rock stars Brad Pitt.";
+//		     System.out.println(Arrays.toString(FC.tokenize(text)));
+		     FC.makeTriplet();
+//		     System.out.println(FC.findVerb(text));	
 		}  
 		catch(IOException e) {
 			e.printStackTrace();

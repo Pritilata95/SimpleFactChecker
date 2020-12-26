@@ -65,7 +65,7 @@ public class FactChecker {
     	 return tokens.stream().toArray(String[]::new);
     }//end*/
     
-    public String findNER(String text) {
+    private String findNER(String text) {
     	String nerstring = "";
     	CoreDocument doc = new CoreDocument(text);
     	pipeline.annotate(doc);
@@ -81,33 +81,45 @@ public class FactChecker {
         Properties props = new Properties();
         // set the list of annotators to run
         props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner");
+        props.setProperty("ner.fine.regexner.ignorecase", "true");
         // build pipeline
         pipeline = new StanfordCoreNLP(props);
     	Set<String> keys = statement_map.keySet();
 	     for(String key : keys) {
 	    	 String text = statement_map.get(key);
+	    	 subject = "";
+    		 object = "";
+    		 predicate = text;
 	    	 try{
-	    		 subject = "";
-	    		 object = "";
-	    		 predicate = text;
 	    		 String verb = findVerb(text);
-	    		 String[] textparts =text.split( " " + verb + " ");	    		 
-	    		 subject = subject+findNER(textparts[0]);
-	    		 object = object+findNER(textparts[1]);
-	    		 String[] sov = (subject + object + verb).split(" ") ;
+	    		 String[] textparts =text.split(" " + verb + " ");
+	    		 String ner1 = findNER(textparts[1]);
+	    		 String ner0 = findNER(textparts[0]);
+	    		 //Finding correct subject and object
+	    		 
+	    		 String[] sov = (subject + object + " "+ verb).split(" ") ;
 	    		 for(String i : sov)
 	    			 predicate = predicate.replace(i, "");
+	    		 predicate = predicate.replaceAll("('s|')", "");
 	    		 System.out.println(text);
 	    		 System.out.println("Subject:"+subject+"\n"+"Object:"+object+"\n"+"Predicate:"+predicate);
 	    		 } 
 	    	 catch(ArrayIndexOutOfBoundsException e){
 	    		 System.out.println("verb not found");
+	    		 List<String> entities = new ArrayList<>();
+	    		 CoreDocument doc = new CoreDocument(text);
+	    		 pipeline.annotate(doc);
+	    		 for (CoreEntityMention em : doc.entityMentions()) {
+	    			 System.out.println("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
+	    	    	 entities.add(em.text());
+	    		 }
+	    		 System.out.println(entities);
 	    	 }		    	 
 	     }
     	
     }
     
-    public String findVerb(String text) {
+    private String findVerb(String text) {
     	String verb = null;
     	//CODE HERE
     	String[] values = {"VB","VBD","VBZ","VBP"};

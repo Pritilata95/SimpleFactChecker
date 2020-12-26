@@ -21,10 +21,11 @@ public class FactChecker {
     protected Map<String, Boolean> statement_value = new LinkedHashMap<>();
     private BufferedReader tsvReader;
     private StanfordCoreNLP pipeline;
+    private String subject, object, predicate;
     
     FactChecker() throws IOException{
     	try {
-    		tsvReader = new BufferedReader(new FileReader("./SNLP2019_training.tsv"));
+    		tsvReader = new BufferedReader(new FileReader("./SNLP2020_training.tsv"));
             String line = null;
             int itteration = 0;
             while((line = tsvReader.readLine()) != null){
@@ -64,20 +65,41 @@ public class FactChecker {
     	 return tokens.stream().toArray(String[]::new);
     }//end*/
     
+    public String findNER(String text) {
+    	String nerstring = "";
+    	CoreDocument doc = new CoreDocument(text);
+    	pipeline.annotate(doc);
+    	for (CoreEntityMention em : doc.entityMentions()) {
+    	      System.out.println("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
+    	      	nerstring += em.text()+" ";
+    	}
+    	return nerstring;
+    }
+    
     public void makeTriplet() {
     	// set up pipeline properties
         Properties props = new Properties();
         // set the list of annotators to run
-        props.setProperty("annotators", "tokenize,ssplit,pos");
+        props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner");
         // build pipeline
         pipeline = new StanfordCoreNLP(props);
     	Set<String> keys = statement_map.keySet();
 	     for(String key : keys) {
 	    	 String text = statement_map.get(key);
 	    	 try{
-	    		 String[] textparts =text.split( " " + findVerb(text) + " ");
-	    		 System.out.println(textparts[0]+"\t"+textparts[1]);
-	    		 }
+	    		 subject = "";
+	    		 object = "";
+	    		 predicate = text;
+	    		 String verb = findVerb(text);
+	    		 String[] textparts =text.split( " " + verb + " ");	    		 
+	    		 subject = subject+findNER(textparts[0]);
+	    		 object = object+findNER(textparts[1]);
+	    		 String[] sov = (subject + object + verb).split(" ") ;
+	    		 for(String i : sov)
+	    			 predicate = predicate.replace(i, "");
+	    		 System.out.println(text);
+	    		 System.out.println("Subject:"+subject+"\n"+"Object:"+object+"\n"+"Predicate:"+predicate);
+	    		 } 
 	    	 catch(ArrayIndexOutOfBoundsException e){
 	    		 System.out.println("verb not found");
 	    	 }		    	 

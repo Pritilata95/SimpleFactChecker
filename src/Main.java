@@ -18,13 +18,13 @@ public class Main {
 		try 
 		{
 			FactChecker FC = new FactChecker();
-			System.out.println("------- FACTS ----------");
+/*			System.out.println("------- FACTS ----------");
 			Set<String> keys = FC.statement_map.keySet();
 			for(String key:keys)
-				System.out.println("Fact ID:"+key+"\tFact Statement:"+FC.statement_map.get(key)+"\tFact Value:"+FC.statement_value.get(key));
+				System.out.println("Fact ID:"+key+"\tFact Statement:"+FC.statement_map.get(key)+"\tFact Value:"+FC.statement_value.get(key));*/
 			
-//		     String text = "The Demolished Man's author is E. E. Smith";
-//		     String text = "Camp Rock stars Brad Pitt.";
+//		     String text = "Nick Jonas' brother is Me.";
+//		     String text = "Dennis Ritchie's book is ANSI C.";
 //		     System.out.println(Arrays.toString(FC.tokenize(text)));
 		     FC.makeTriplet();
 //		     System.out.println(FC.findVerb(text));	

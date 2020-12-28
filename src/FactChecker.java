@@ -11,6 +11,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import edu.stanford.nlp.ling.*;
 import edu.stanford.nlp.pipeline.*;
@@ -27,10 +29,10 @@ public class FactChecker {
     	try {
     		tsvReader = new BufferedReader(new FileReader("./SNLP2020_training.tsv"));
             String line = null;
-            int itteration = 0;
+            int iteration = 0;
             while((line = tsvReader.readLine()) != null){
-            	if(itteration==0) {
-            		itteration++;
+            	if(iteration==0) {
+            		iteration++;
             		continue;
             	}
             	
@@ -65,73 +67,105 @@ public class FactChecker {
     	 return tokens.stream().toArray(String[]::new);
     }//end*/
     
-    private String findNER(String text) {
-    	String nerstring = "";
-    	CoreDocument doc = new CoreDocument(text);
-    	pipeline.annotate(doc);
-    	for (CoreEntityMention em : doc.entityMentions()) {
-    	      System.out.println("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
-    	      	nerstring += em.text()+" ";
-    	}
-    	return nerstring;
+    public String findEntity(String text, int verbIndex) {
+    	String entityString = "";
+    	
+    	return entityString;
+    }
+    
+    public int[] findSubjectBoundary(String text) {
+        Pattern pattern = Pattern.compile("('s|')");
+        Matcher matcher = pattern.matcher(text);
+        int start_index = -1 , end_index = -1;
+        // Check all occurrences
+        while (matcher.find()) {
+        	start_index = matcher.start();
+            System.out.println("Start index: " + start_index);
+            end_index = matcher.end();
+            System.out.println("End index: " + end_index);
+            System.out.println("Found: " + matcher.group());
+        }
+        return new int[] {start_index, end_index};
     }
     
     public void makeTriplet() {
     	// set up pipeline properties
         Properties props = new Properties();
         // set the list of annotators to run
-        props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner");
-        props.setProperty("ner.fine.regexner.ignorecase", "true");
+        props.setProperty("annotators", "tokenize,ssplit,pos,lemma");
+        //props.setProperty("ner.fine.regexner.ignorecase", "true");
         // build pipeline
         pipeline = new StanfordCoreNLP(props);
     	Set<String> keys = statement_map.keySet();
-	     for(String key : keys) {
+	    for(String key : keys) {
 	    	 String text = statement_map.get(key);
 	    	 subject = "";
     		 object = "";
-    		 predicate = text;
+    		 predicate = "";
 	    	 try{
-	    		 String verb = findVerb(text);
+	    		 String verb = findVerb(text, false); //Normal Behaviour- Find VERB POS Tags
+	    		 int verbIndex = text.indexOf(" " + verb + " ");
+	    		 System.out.println("Verb "+verb+" starts at "+verbIndex);
 	    		 String[] textparts =text.split(" " + verb + " ");
-	    		 String ner1 = findNER(textparts[1]);
-	    		 String ner0 = findNER(textparts[0]);
-	    		 //Finding correct subject and object
-	    		 
-	    		 String[] sov = (subject + object + " "+ verb).split(" ") ;
-	    		 for(String i : sov)
-	    			 predicate = predicate.replace(i, "");
-	    		 predicate = predicate.replaceAll("('s|')", "");
-	    		 System.out.println(text);
-	    		 System.out.println("Subject:"+subject+"\n"+"Object:"+object+"\n"+"Predicate:"+predicate);
+	    		 System.out.println(Arrays.toString(textparts));
+	    		 int[] subjectEndIndices = findSubjectBoundary(text);
+	    		 System.out.println(Arrays.toString(subjectEndIndices));
+	    		 if(verbIndex == subjectEndIndices[0]) //both are -1
+	    			 throw new ArrayIndexOutOfBoundsException();
+	    		 else if(verbIndex > 0 & subjectEndIndices[0] < 0){
+	    			 predicate = verb;
+	    			 subject = textparts[0];
+	    			 object = textparts[1].substring(0,textparts[1].lastIndexOf("."));
+	    			 System.out.println("Subject:" + subject);
+	    			 System.out.println("Object:" + object);
+	    			 System.out.println("Predicate:" + predicate);
+	    		 }
+	    		 else if(verbIndex < subjectEndIndices[0]){
+	    			 object = textparts[0];
+	    			 //Need to adjust search indices after splitting 
+	    			 subject = textparts[1].substring(0, subjectEndIndices[0]-object.length()-verb.length()-2);
+	    			 predicate = textparts[1].substring(subjectEndIndices[1]-object.length()-verb.length()-2, textparts[1].lastIndexOf("."));
+	    			 System.out.println("Subject:" + subject);
+	    			 System.out.println("Object:" + object);
+	    			 System.out.println("Predicate:" + predicate);
 	    		 } 
+	    	 } 
 	    	 catch(ArrayIndexOutOfBoundsException e){
 	    		 System.out.println("verb not found");
-	    		 List<String> entities = new ArrayList<>();
-	    		 CoreDocument doc = new CoreDocument(text);
-	    		 pipeline.annotate(doc);
-	    		 for (CoreEntityMention em : doc.entityMentions()) {
-	    			 System.out.println("\tdetected entity: \t"+em.text()+"\t"+em.entityType());
-	    	    	 entities.add(em.text());
-	    		 }
-	    		 System.out.println(entities);
+	    		 String verb = findVerb(text, true); //Exception- Find NOUN-ly POS Tags
+	    		 int verbIndex = text.indexOf(" " + verb + " ");
+	    		 System.out.println("Verb "+verb+" starts at "+verbIndex);
+	    		 String[] textparts =text.split(" " + verb + " ");
+	    		 subject = textparts[0];
+    			 object = textparts[1].substring(0,textparts[1].length()-1);
+    			 System.out.println("Subject:" + subject);
+    			 System.out.println("Object:" + object);
+    			 System.out.println("Predicate:" + predicate);
 	    	 }		    	 
 	     }
     	
     }
     
-    private String findVerb(String text) {
-    	String verb = null;
+    public String findVerb(String text, boolean flag) {
+    	String verb = "";
+    	CoreDocument document = pipeline.processToCoreDocument(text); // create a document object
     	//CODE HERE
-    	String[] values = {"VB","VBD","VBZ","VBP"};
-        // create a document object
-        CoreDocument document = pipeline.processToCoreDocument(text);
-        // display tokens
-        for (CoreLabel tok : document.tokens()) {
-        	if(Arrays.stream(values).anyMatch(tok.tag()::equals)) {
-        		verb = tok.word();
-        	}
-        	//System.out.println(String.format("%s\t%s", tok.word(), tok.tag()));
-        }
-    	return verb;
+    	if(!flag){
+    		String[] values = {"VB","VBD","VBZ","VBP","VBN"};
+    		for (CoreLabel tok : document.tokens()) {
+    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0)))
+    				verb += tok.word()+" ";
+//        		System.out.println(String.format("%s\t%s\t%s", tok.word(), tok.lemma(), tok.tag()));
+        		}
+    	}
+    	if(flag){
+    		String[] values = {"NNS"};
+    		for (CoreLabel tok : document.tokens()) {
+    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0)))
+    				verb += tok.word()+" ";
+//        		System.out.println(String.format("%s\t%s\t%s", tok.word(), tok.lemma(), tok.tag()));
+        		}
+    	}
+    	return verb.trim();
     }
 }

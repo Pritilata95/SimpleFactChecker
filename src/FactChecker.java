@@ -19,36 +19,34 @@ import edu.stanford.nlp.pipeline.*;
 
 public class FactChecker {
 	
-	protected Map<String, String> statement_map = new LinkedHashMap<>();
-    protected Map<String, Boolean> statement_value = new LinkedHashMap<>();
+	protected Map<String, String[]> training_statement_map = new LinkedHashMap<>();
+    protected Map<String, Boolean> training_statement_value = new LinkedHashMap<>();
     private BufferedReader tsvReader;
     private StanfordCoreNLP pipeline;
+    private List<String> verbSet;
     private String subject, object, predicate;
     
     FactChecker() throws IOException{
     	try {
     		tsvReader = new BufferedReader(new FileReader("./SNLP2020_training.tsv"));
             String line = null;
-            int iteration = 0;
+//            int iteration = 0;
             while((line = tsvReader.readLine()) != null){
-            	if(iteration==0) {
+            	/*if(iteration==0) {
             		iteration++;
             		continue;
-            	}
+            	}*/
             	
                 String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
-                statement_map.put(lineItems[0], lineItems[1]);
-                statement_value.put(lineItems[0], "1.0".equals(lineItems[2]));
+                training_statement_map.put(lineItems[0], new String[]{lineItems[1]});
+                training_statement_value.put(lineItems[0], "1.0".equals(lineItems[2]));
             }
-        } 
-        catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
 //            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FILE NOT FOUND");
-        } 
-        catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally {
+        } finally {
         	tsvReader.close();
         }
     }
@@ -80,10 +78,10 @@ public class FactChecker {
         // Check all occurrences
         while (matcher.find()) {
         	start_index = matcher.start();
-            System.out.println("Start index: " + start_index);
+//            System.out.println("Start index: " + start_index);
             end_index = matcher.end();
-            System.out.println("End index: " + end_index);
-            System.out.println("Found: " + matcher.group());
+//            System.out.println("End index: " + end_index);
+//            System.out.println("Found: " + matcher.group());
         }
         return new int[] {start_index, end_index};
     }
@@ -96,74 +94,115 @@ public class FactChecker {
         //props.setProperty("ner.fine.regexner.ignorecase", "true");
         // build pipeline
         pipeline = new StanfordCoreNLP(props);
-    	Set<String> keys = statement_map.keySet();
+        verbSet = new ArrayList<>(); //NOT USED YET
+    	Set<String> keys = training_statement_map.keySet();
 	    for(String key : keys) {
-	    	 String text = statement_map.get(key);
+	    	 String text = training_statement_map.get(key)[0];
 	    	 subject = "";
     		 object = "";
     		 predicate = "";
 	    	 try{
 	    		 String verb = findVerb(text, false); //Normal Behaviour- Find VERB POS Tags
+	    		 if(!verbSet.contains(verb)) verbSet.add(verb);
 	    		 int verbIndex = text.indexOf(" " + verb + " ");
-	    		 System.out.println("Verb "+verb+" starts at "+verbIndex);
+//	    		 System.out.println("Verb "+verb+" starts at "+verbIndex);
 	    		 String[] textparts =text.split(" " + verb + " ");
-	    		 System.out.println(Arrays.toString(textparts));
+//	    		 System.out.println(Arrays.toString(textparts));
 	    		 int[] subjectEndIndices = findSubjectBoundary(text);
-	    		 System.out.println(Arrays.toString(subjectEndIndices));
+//	    		 System.out.println(Arrays.toString(subjectEndIndices));
 	    		 if(verbIndex == subjectEndIndices[0]) //both are -1
 	    			 throw new ArrayIndexOutOfBoundsException();
 	    		 else if(verbIndex > 0 & subjectEndIndices[0] < 0){
 	    			 predicate = verb;
 	    			 subject = textparts[0];
 	    			 object = textparts[1].substring(0,textparts[1].lastIndexOf("."));
-	    			 System.out.println("Subject:" + subject);
+	    			 /*System.out.println("Subject:" + subject);
 	    			 System.out.println("Object:" + object);
-	    			 System.out.println("Predicate:" + predicate);
+	    			 System.out.println("Predicate:" + predicate);*/
 	    		 }
 	    		 else if(verbIndex < subjectEndIndices[0]){
 	    			 object = textparts[0];
 	    			 //Need to adjust search indices after splitting 
 	    			 subject = textparts[1].substring(0, subjectEndIndices[0]-object.length()-verb.length()-2);
 	    			 predicate = textparts[1].substring(subjectEndIndices[1]-object.length()-verb.length()-2, textparts[1].lastIndexOf("."));
-	    			 System.out.println("Subject:" + subject);
+	    			 /*System.out.println("Subject:" + subject);
 	    			 System.out.println("Object:" + object);
-	    			 System.out.println("Predicate:" + predicate);
-	    		 } 
-	    	 } 
-	    	 catch(ArrayIndexOutOfBoundsException e){
-	    		 System.out.println("verb not found");
+	    			 System.out.println("Predicate:" + predicate);*/
+	    		 }
+	    		 else if(verbIndex > subjectEndIndices[0]){
+	    			 try{
+	    				 object = textparts[1].substring(0,textparts[1].lastIndexOf("."));
+	    			 }catch(StringIndexOutOfBoundsException se){
+	    				 object = textparts[1];
+	    			 }
+	    			 subject = textparts[0].substring(0, subjectEndIndices[0]);
+	    			 predicate = textparts[0].substring(subjectEndIndices[1]).trim();
+	    			 /*System.out.println("Subject:" + subject);
+	    			 System.out.println("Object:" + object);
+	    			 System.out.println("Predicate:" + predicate);*/
+	    		 }
+	    	 }catch(ArrayIndexOutOfBoundsException e){
+//	    		 System.out.println("verb not found");
 	    		 String verb = findVerb(text, true); //Exception- Find NOUN-ly POS Tags
 	    		 int verbIndex = text.indexOf(" " + verb + " ");
-	    		 System.out.println("Verb "+verb+" starts at "+verbIndex);
+//	    		 System.out.println("Verb "+verb+" starts at "+verbIndex);
 	    		 String[] textparts =text.split(" " + verb + " ");
 	    		 subject = textparts[0];
     			 object = textparts[1].substring(0,textparts[1].length()-1);
-    			 System.out.println("Subject:" + subject);
+    			 predicate = verb;
+    			 /*System.out.println("Subject:" + subject);
     			 System.out.println("Object:" + object);
-    			 System.out.println("Predicate:" + predicate);
-	    	 }		    	 
+    			 System.out.println("Predicate:" + predicate);*/
+	    	 }finally{
+	    		 training_statement_map.put(key, new String[] {subject, object, predicate});
+	    	 }
+	    	 
 	     }
-    	
     }
     
     public String findVerb(String text, boolean flag) {
     	String verb = "";
+    	int prevIndex = -1;
     	CoreDocument document = pipeline.processToCoreDocument(text); // create a document object
     	//CODE HERE
     	if(!flag){
     		String[] values = {"VB","VBD","VBZ","VBP","VBN"};
     		for (CoreLabel tok : document.tokens()) {
-    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0)))
-    				verb += tok.word()+" ";
-//        		System.out.println(String.format("%s\t%s\t%s", tok.word(), tok.lemma(), tok.tag()));
+    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0)) & !tok.word().matches("('s|')")){
+    				if(tok.index() == prevIndex+1){ //consecutive Verb tags
+    					verb += tok.word()+" ";
+    					prevIndex = tok.index();
+    				}
+    				else if(tok.index() != prevIndex+1){ //non-consecutive Verb tags
+    					verb = tok.word()+" ";
+    					prevIndex = tok.index();
+    				}
+    				else if(prevIndex == -1){ //first occurence of Verb tag
+    					verb = tok.word()+" ";
+    					prevIndex = tok.index();
+    				}
+    			}	
+//        		System.out.println(String.format("%s\t%s\t%s\t%d", tok.word(), tok.lemma(), tok.tag(), tok.index()));
         		}
     	}
     	if(flag){
-    		String[] values = {"NNS"};
+    		String[] values = {"VB","VBD","VBZ","VBP","VBN","NNS"};
     		for (CoreLabel tok : document.tokens()) {
-    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0)))
-    				verb += tok.word()+" ";
-//        		System.out.println(String.format("%s\t%s\t%s", tok.word(), tok.lemma(), tok.tag()));
+    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0))){
+    				if(tok.index() == prevIndex+1){ //consecutive Verb tags
+    					verb += tok.word()+" "; //add the words
+    					prevIndex = tok.index();
+    				}
+    				else if(tok.index() != prevIndex+1){ //non-consecutive Verb tags
+    					verb = tok.word()+" "; //overwrite
+    					prevIndex = tok.index();
+    				}
+    				else if(prevIndex == -1){ //first occurence of Verb tag
+    					verb = tok.word()+" "; //overwrite
+    					prevIndex = tok.index();
+    				}
+    			}	
+//        		System.out.println(String.format("%s\t%s\t%s\t%d", tok.word(), tok.lemma(), tok.tag(), tok.index()));
         		}
     	}
     	return verb.trim();

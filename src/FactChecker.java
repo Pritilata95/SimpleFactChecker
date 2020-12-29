@@ -2,10 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -20,10 +18,10 @@ import edu.stanford.nlp.pipeline.*;
 public class FactChecker {
 	
 	protected Map<String, String[]> training_statement_map = new LinkedHashMap<>();
+	protected Map<String, String[]> test_statement_map = new LinkedHashMap<>();
     protected Map<String, Boolean> training_statement_value = new LinkedHashMap<>();
-    private BufferedReader tsvReader;
+    private BufferedReader tsvReader, tsvReader1;
     private StanfordCoreNLP pipeline;
-    private List<String> verbSet;
     private String subject, object, predicate;
     
     FactChecker() throws IOException{
@@ -41,13 +39,20 @@ public class FactChecker {
                 training_statement_map.put(lineItems[0], new String[]{lineItems[1]});
                 training_statement_value.put(lineItems[0], "1.0".equals(lineItems[2]));
             }
+            tsvReader1 = new BufferedReader(new FileReader("./SNLP2020_test.tsv"));
+            String line1 = null;
+            while((line1 = tsvReader1.readLine()) != null){
+                String[] lineItems1 = line1.split("\t"); //splitting the line and adding its items in String[]
+                test_statement_map.put(lineItems1[0], new String[]{lineItems1[1]});
+            }
         } catch (FileNotFoundException ex) {
 //            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("FILE NOT FOUND");
+            System.out.println("FILES NOT FOUND");
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
         	tsvReader.close();
+        	tsvReader1.close();
         }
     }
     
@@ -65,12 +70,6 @@ public class FactChecker {
     	 return tokens.stream().toArray(String[]::new);
     }//end*/
     
-    public String findEntity(String text, int verbIndex) {
-    	String entityString = "";
-    	
-    	return entityString;
-    }
-    
     public int[] findSubjectBoundary(String text) {
         Pattern pattern = Pattern.compile("('s|')");
         Matcher matcher = pattern.matcher(text);
@@ -86,6 +85,69 @@ public class FactChecker {
         return new int[] {start_index, end_index};
     }
     
+    public String[] processData(String text){
+    	subject = "";
+		object = "";
+		predicate = "";
+		try{
+			String verb = findVerb(text, false); //Normal Behaviour- Find VERB POS Tags
+   		 	int verbIndex = text.indexOf(" " + verb + " ");
+//   		 	System.out.println("Verb "+verb+" starts at "+verbIndex);
+   		 	String[] textparts =text.split(" " + verb + " ");
+//   		 	System.out.println(Arrays.toString(textparts));
+   		 	int[] subjectEndIndices = findSubjectBoundary(text);
+//   		 	System.out.println(Arrays.toString(subjectEndIndices));
+   		 	if(verbIndex == subjectEndIndices[0]) //both are -1
+   		 		throw new ArrayIndexOutOfBoundsException();
+   		 	else if(verbIndex > 0 & subjectEndIndices[0] < 0){
+   		 		predicate = verb;
+   		 		subject = textparts[0];
+   		 		object = textparts[1].substring(0,textparts[1].lastIndexOf("."));
+   		 		/*System.out.println("Subject:" + subject);
+   			 	System.out.println("Object:" + object);
+   			 	System.out.println("Predicate:" + predicate);*/
+   		 	}
+   		 	else if(verbIndex < subjectEndIndices[0]){
+   		 		object = textparts[0];
+   		 		//Need to adjust search indices after splitting 
+   		 		subject = textparts[1].substring(0, subjectEndIndices[0]-object.length()-verb.length()-2);
+   		 		predicate = textparts[1].substring(subjectEndIndices[1]-object.length()-verb.length()-2, textparts[1].lastIndexOf("."));
+   		 		/*System.out.println("Subject:" + subject);
+   			 	System.out.println("Object:" + object);
+   			 	System.out.println("Predicate:" + predicate);*/
+   		 	}
+   		 	else if(verbIndex > subjectEndIndices[0]){
+   		 		try{
+   		 			object = textparts[1].substring(0,textparts[1].lastIndexOf("."));
+   		 		}catch(StringIndexOutOfBoundsException se){
+   		 			object = textparts[1];
+   		 		}
+   		 		subject = textparts[0].substring(0, subjectEndIndices[0]);
+   		 		predicate = textparts[0].substring(subjectEndIndices[1]).trim();
+   		 		/*System.out.println("Subject:" + subject);
+   			 	System.out.println("Object:" + object);
+   			 	System.out.println("Predicate:" + predicate);*/
+   		 	}
+   	 	}catch(ArrayIndexOutOfBoundsException e){
+//   	 		System.out.println(text);
+   	 		String verb = findVerb(text, true); //Exception- Find NOUN-ly POS Tags
+//   	 		int verbIndex = text.indexOf(" " + verb + " ");
+//   		 	System.out.println("Verb "+verb+" starts at "+verbIndex);
+   	 		String[] textparts =text.split(" " + verb + " ");
+   	 		subject = textparts[0];
+   	 		try{
+	 			object = textparts[1].substring(0,textparts[1].lastIndexOf("."));
+	 		}catch(StringIndexOutOfBoundsException se){
+	 			object = textparts[1];
+	 		}
+			predicate = verb;
+			/*System.out.println("Subject:" + subject);
+			System.out.println("Object:" + object);
+			System.out.println("Predicate:" + predicate);*/
+   	 	}
+		return new String[] {subject, object, predicate};
+    }
+    
     public void makeTriplet() {
     	// set up pipeline properties
         Properties props = new Properties();
@@ -94,70 +156,12 @@ public class FactChecker {
         //props.setProperty("ner.fine.regexner.ignorecase", "true");
         // build pipeline
         pipeline = new StanfordCoreNLP(props);
-        verbSet = new ArrayList<>(); //NOT USED YET
-    	Set<String> keys = training_statement_map.keySet();
-	    for(String key : keys) {
-	    	 String text = training_statement_map.get(key)[0];
-	    	 subject = "";
-    		 object = "";
-    		 predicate = "";
-	    	 try{
-	    		 String verb = findVerb(text, false); //Normal Behaviour- Find VERB POS Tags
-	    		 if(!verbSet.contains(verb)) verbSet.add(verb);
-	    		 int verbIndex = text.indexOf(" " + verb + " ");
-//	    		 System.out.println("Verb "+verb+" starts at "+verbIndex);
-	    		 String[] textparts =text.split(" " + verb + " ");
-//	    		 System.out.println(Arrays.toString(textparts));
-	    		 int[] subjectEndIndices = findSubjectBoundary(text);
-//	    		 System.out.println(Arrays.toString(subjectEndIndices));
-	    		 if(verbIndex == subjectEndIndices[0]) //both are -1
-	    			 throw new ArrayIndexOutOfBoundsException();
-	    		 else if(verbIndex > 0 & subjectEndIndices[0] < 0){
-	    			 predicate = verb;
-	    			 subject = textparts[0];
-	    			 object = textparts[1].substring(0,textparts[1].lastIndexOf("."));
-	    			 /*System.out.println("Subject:" + subject);
-	    			 System.out.println("Object:" + object);
-	    			 System.out.println("Predicate:" + predicate);*/
-	    		 }
-	    		 else if(verbIndex < subjectEndIndices[0]){
-	    			 object = textparts[0];
-	    			 //Need to adjust search indices after splitting 
-	    			 subject = textparts[1].substring(0, subjectEndIndices[0]-object.length()-verb.length()-2);
-	    			 predicate = textparts[1].substring(subjectEndIndices[1]-object.length()-verb.length()-2, textparts[1].lastIndexOf("."));
-	    			 /*System.out.println("Subject:" + subject);
-	    			 System.out.println("Object:" + object);
-	    			 System.out.println("Predicate:" + predicate);*/
-	    		 }
-	    		 else if(verbIndex > subjectEndIndices[0]){
-	    			 try{
-	    				 object = textparts[1].substring(0,textparts[1].lastIndexOf("."));
-	    			 }catch(StringIndexOutOfBoundsException se){
-	    				 object = textparts[1];
-	    			 }
-	    			 subject = textparts[0].substring(0, subjectEndIndices[0]);
-	    			 predicate = textparts[0].substring(subjectEndIndices[1]).trim();
-	    			 /*System.out.println("Subject:" + subject);
-	    			 System.out.println("Object:" + object);
-	    			 System.out.println("Predicate:" + predicate);*/
-	    		 }
-	    	 }catch(ArrayIndexOutOfBoundsException e){
-//	    		 System.out.println("verb not found");
-	    		 String verb = findVerb(text, true); //Exception- Find NOUN-ly POS Tags
-	    		 int verbIndex = text.indexOf(" " + verb + " ");
-//	    		 System.out.println("Verb "+verb+" starts at "+verbIndex);
-	    		 String[] textparts =text.split(" " + verb + " ");
-	    		 subject = textparts[0];
-    			 object = textparts[1].substring(0,textparts[1].length()-1);
-    			 predicate = verb;
-    			 /*System.out.println("Subject:" + subject);
-    			 System.out.println("Object:" + object);
-    			 System.out.println("Predicate:" + predicate);*/
-	    	 }finally{
-	    		 training_statement_map.put(key, new String[] {subject, object, predicate});
-	    	 }
-	    	 
-	     }
+    	Set<String> training_keys = training_statement_map.keySet();
+    	Set<String> test_keys = test_statement_map.keySet();
+	    for(String key : training_keys)
+	    	 training_statement_map.put(key, processData(training_statement_map.get(key)[0]));
+	    for(String key : test_keys)
+	    	test_statement_map.put(key, processData(test_statement_map.get(key)[0]));
     }
     
     public String findVerb(String text, boolean flag) {
@@ -168,7 +172,7 @@ public class FactChecker {
     	if(!flag){
     		String[] values = {"VB","VBD","VBZ","VBP","VBN"};
     		for (CoreLabel tok : document.tokens()) {
-    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0)) & !tok.word().matches("('s|')")){
+    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0)) & tok.word().matches("[a-z]{2,}")){
     				if(tok.index() == prevIndex+1){ //consecutive Verb tags
     					verb += tok.word()+" ";
     					prevIndex = tok.index();
@@ -188,7 +192,7 @@ public class FactChecker {
     	if(flag){
     		String[] values = {"VB","VBD","VBZ","VBP","VBN","NNS"};
     		for (CoreLabel tok : document.tokens()) {
-    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0))){
+    			if(Arrays.stream(values).anyMatch(tok.tag()::equals) & !Character.isUpperCase(tok.word().charAt(0)) & tok.word().matches("[a-z]{2,}")){
     				if(tok.index() == prevIndex+1){ //consecutive Verb tags
     					verb += tok.word()+" "; //add the words
     					prevIndex = tok.index();

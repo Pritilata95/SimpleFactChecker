@@ -19,9 +19,9 @@ public class Main {
 		{
 			FactChecker FC = new FactChecker();
 /*			System.out.println("------- FACTS ----------");
-			Set<String> keys = FC.statement_map.keySet();
+			Set<String> keys = FC.test_statement_map.keySet();
 			for(String key:keys)
-				System.out.println("Fact ID:"+key+"\tFact Statement:"+FC.statement_map.get(key)+"\tFact Value:"+FC.statement_value.get(key));*/
+				System.out.println("Fact ID:"+key+"\tFact Statement:"+Arrays.toString(FC.test_statement_map.get(key)));*/
 			
 //		    String text = "Maria das Neves' award is São Tomé and Príncipe.";
 //		    String text = "Stars Nokia, Finland has been Nokiaed Nokia.";

@@ -31,14 +31,19 @@ public class Main {
 //		    System.out.println(Arrays.toString(FC.tokenize(text)));
 		    FC.makeTriplet();
 //		    System.out.println(FC.findVerb(text,true));	
-		    System.out.println(Arrays.toString(FC.training_statement_map.get("3326237")));
-		    System.out.println(Arrays.toString(FC.training_statement_map.get("3620807")));
-		    System.out.println(Arrays.toString(FC.training_statement_map.get("3818539")));
-		    System.out.println(Arrays.toString(FC.training_statement_map.get("3419884")));
-		    System.out.println(Arrays.toString(FC.training_statement_map.get("3658486")));
-		    System.out.println(Arrays.toString(FC.training_statement_map.get("4330918")));
-		    System.out.println(Arrays.toString(FC.training_statement_map.get("3871761")));
-		    System.out.println(Arrays.toString(FC.training_statement_map.get("3387592")));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3326237"))+"\t"+FC.training_statement_value.get("3326237"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3620807"))+"\t"+FC.training_statement_value.get("3620807"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3818539"))+"\t"+FC.training_statement_value.get("3818539"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3419884"))+"\t"+FC.training_statement_value.get("3419884"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3658486"))+"\t"+FC.training_statement_value.get("3658486"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("4330918"))+"\t"+FC.training_statement_value.get("4330918"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3871761"))+"\t"+FC.training_statement_value.get("3871761"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3387592"))+"\t"+FC.training_statement_value.get("3387592"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3399684"))+"\t"+FC.training_statement_value.get("3399684"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3813728"))+"\t"+FC.training_statement_value.get("3813728"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3457895"))+"\t"+FC.training_statement_value.get("3457895"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3611275"))+"\t"+FC.training_statement_value.get("3611275"));
+		    System.out.println(Arrays.toString(FC.training_statement_map.get("3323850"))+"\t"+FC.training_statement_value.get("3323850"));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}

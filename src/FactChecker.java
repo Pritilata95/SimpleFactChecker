@@ -7,8 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,10 +44,9 @@ public class FactChecker {
                 test_statement_map.put(lineItems1[0], new String[]{lineItems1[1]});
             }
         } catch (FileNotFoundException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("FILES NOT FOUND");
         } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        	System.out.println("IO EXCEPTION");
         } finally {
         	tsvReader.close();
         	tsvReader1.close();

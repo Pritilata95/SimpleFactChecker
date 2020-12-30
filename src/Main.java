@@ -47,7 +47,7 @@ public class Main {
 		    
 		    System.out.println("----------- WIKI -------------");
 		    FactSearcher FS = new FactSearcher();
-		    System.out.println(FS.wikiSearcher("Orbital Resonance (novel)"));
+		    System.out.println(FS.wikiSearcher(FC.training_statement_map.get("3457895")));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}

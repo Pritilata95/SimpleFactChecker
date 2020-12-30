@@ -21,8 +21,10 @@ public class FactSearcher {
 		dbf = DocumentBuilderFactory.newInstance();
 	}
 	
-	public String wikiSearcher(String subject){
+	public String wikiSearcher(String[] triplet){
+		String subject = triplet[0];
 		String page_id = null;
+		System.out.println(subject);
 		subject = subject.replaceAll("\\s+", "%20");
 		try {
 			wikiSearch = new URL("https","en.wikipedia.org","/w/api.php?action=query&list=search&srsearch="+subject+"&format=xml");

@@ -18,8 +18,8 @@ public class Main {
 		try 
 		{
 			FactChecker FC = new FactChecker();
-/*			System.out.println("------- FACTS ----------");
-			Set<String> keys = FC.test_statement_map.keySet();
+			System.out.println("------- FACT TRIPLETS----------");
+/*			Set<String> keys = FC.test_statement_map.keySet();
 			for(String key:keys)
 				System.out.println("Fact ID:"+key+"\tFact Statement:"+Arrays.toString(FC.test_statement_map.get(key)));*/
 			
@@ -44,6 +44,10 @@ public class Main {
 		    System.out.println(Arrays.toString(FC.training_statement_map.get("3457895"))+"\t"+FC.training_statement_value.get("3457895"));
 		    System.out.println(Arrays.toString(FC.training_statement_map.get("3611275"))+"\t"+FC.training_statement_value.get("3611275"));
 		    System.out.println(Arrays.toString(FC.training_statement_map.get("3323850"))+"\t"+FC.training_statement_value.get("3323850"));
+		    
+		    System.out.println("----------- WIKI -------------");
+		    FactSearcher FS = new FactSearcher();
+		    System.out.println(FS.wikiSearcher("Orbital Resonance (novel)"));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}

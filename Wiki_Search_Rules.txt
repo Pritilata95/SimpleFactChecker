@@ -17,6 +17,7 @@ XML is human-readable, JSON is machine-readable. Need to know which is regex-fri
 [IBM, New York City,  innovation place]	false	. A year later, it moved its corporate headquarters from New York City to [[Armonk, New York]].
 
 [Edward Bernays, Vienna, death place]	false	| birth_place = [[Vienna]], [[Austria-Hungary]] | (NOTE- 2nd MATCH, NOT 1st)
+| birth_name = Edward Bernays<ref>Tye (1998), p. 147. "Feeling he was too short, at 5 feet 4 inches, Eddie seemed determined to make everything else larger than life. He even inflated his name with an ''L.'', a middle initial that was not on his birth record in Vienna. It apparently stood for Louis, although even his daughters aren't sure, since he didn't like to talk about it.</ref> | (Erroneous 1st match)
 
 [Pär Lagerkvist, Nobel Prize in Physics, award]	false	MATCH NOT FOUND
 

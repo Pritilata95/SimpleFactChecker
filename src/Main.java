@@ -47,7 +47,8 @@ public class Main {
 		    
 		    System.out.println("----------- WIKI -------------");
 		    FactSearcher FS = new FactSearcher();
-		    System.out.println(FS.wikiSearcher(FC.training_statement_map.get("3457895")));
+		    System.out.println(Arrays.toString(FS.wikiSearcher(FC.training_statement_map.get("3399684"))));
+		    System.out.println(Arrays.toString(FS.wikiSearcher(FC.test_statement_map.get("3856463"))));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}

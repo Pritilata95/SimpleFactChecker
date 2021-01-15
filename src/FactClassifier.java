@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +23,14 @@ public class FactClassifier {
 		    "don","should","now","place"));
 	
 	public FactClassifier (Set<String> classes) {
-		
+		classFrequency = new HashMap<String, Integer>();
+        classVocab = new HashMap<String, Map<String, Integer>>();
+        Iterator<String> it = classes.iterator();
+        while (it.hasNext()) {
+            String item = it.next().toString();
+            classFrequency.put(item, 0);
+            classVocab.put(item, new HashMap<String, Integer>());
+        }
 	}
 	
 	private List<String> preprocess(String text) {

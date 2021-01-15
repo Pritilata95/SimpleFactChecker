@@ -72,8 +72,8 @@ public class FactClassifier {
         double intprob = Double.NEGATIVE_INFINITY;
         List<String> l = preprocess(text);
         Set<String> classez = classfrequency.keySet();
-        int total_class_occurence = 0;
-        total_class_occurence = classfrequency.keySet().stream().map(key -> classfrequency.get(key)).reduce(total_class_occurence, Integer::sum);
+//        int total_class_occurence = 0;
+//        total_class_occurence = classfrequency.keySet().stream().map(key -> classfrequency.get(key)).reduce(total_class_occurence, Integer::sum);
         for(String s : classez){ 
             double likelihood=0L;
             double classprob=0L;
@@ -89,9 +89,9 @@ public class FactClassifier {
                 }
                 likelihood += Math.log((double)(nk+1)/(n+docVocab.size()));
             }
-            double classPrior = (double) classfrequency.get(s) / total_class_occurence;
-//            classprob = Math.log(0.5)+likelihood;
-            classprob = Math.log(classPrior)+likelihood; 
+//            double classPrior = (double) classfrequency.get(s) / total_class_occurence;
+            classprob = Math.log(0.5)+likelihood;
+//            classprob = Math.log(classPrior)+likelihood; 
             if(classprob > intprob){
                 intprob = classprob; 
                 clazz = s;

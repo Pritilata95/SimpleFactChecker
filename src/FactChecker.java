@@ -145,15 +145,19 @@ public class FactChecker {
     }
     
     public void searchWiki() {
-    	Set<String> training_keys = training_statement_map.keySet();
-    	FactSearcher FS = new FactSearcher();
-    	for(String key : training_keys)
-    		FS.wikiSearcher(training_statement_map.get(key));
-//    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
-    	System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
-    	System.out.println("IO EXCEPTION :"+FS.ioe);
-    	System.out.println("NULL POINTER EXCEPTION :"+FS.npe);
-    }
+        Set<String> training_keys = training_statement_map.keySet();
+        Set<String> test_keys = test_statement_map.keySet();
+        FactSearcher FS = new FactSearcher();
+        for(String key : training_keys)
+        	training_statement_map.put(key, FS.wikiSearcher(training_statement_map.get(key)));
+//        	System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
+        for(String key : test_keys)
+        	test_statement_map.put(key, FS.wikiSearcher(test_statement_map.get(key)));
+//        	System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(test_statement_map.get(key))));
+        System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
+        System.out.println("IO EXCEPTION :"+FS.ioe);
+        System.out.println("NULL POINTER EXCEPTION :"+FS.npe);
+        }
     
     public void trainClassifier() {
     	classifier = new FactClassifier(new HashSet<>(training_statement_value.values()));
@@ -178,7 +182,7 @@ public class FactChecker {
     	String type = "http://www.w3.org/2001/XMLSchema#double";
     	for(String id : test_keys) {
     		String[] arr = test_statement_map.get(id);
-    		System.out.println(Arrays.toString(arr));
+//    		System.out.println(Arrays.toString(arr));
     		try {
     			factVal = classifier.classify(arr[2] + " " + arr[3]);
     		} catch (ArrayIndexOutOfBoundsException aiobex) {

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class FactClassifier {
+	
 	private Set<String> docVocab;
 	private Map<String, Integer>  classFrequency;
 	private Map<String, Map<String, Integer>> classVocab;
@@ -18,6 +19,10 @@ public class FactClassifier {
 		    "further","then","once","here","there","when","where","why","how","all","any","both","each","few","more","most",
 		    "other","some","such","no","nor","not","only","own","same","so","than","too","very","s","t","can","will","just",
 		    "don","should","now","place"));
+	
+	public FactClassifier (Set<String> classes) {
+		
+	}
 	
 	private List<String> preprocess(String text) {
         List<String> tokens = new ArrayList<>();

@@ -23,7 +23,7 @@ public class FactSearcher {
 	private String subject, object, predicate, wiki_predicate;
 	public int ioe, npe, mfue;
 	
-	FactSearcher(){
+	public FactSearcher(){
 		dbf = DocumentBuilderFactory.newInstance();
 	}
 	

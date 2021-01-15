@@ -22,7 +22,7 @@ public class FactChecker {
     private StanfordCoreNLP pipeline;
     private String subject, object, predicate;
     
-    FactChecker() throws IOException{
+    public FactChecker() throws IOException{
     	try {
     		tsvReader = new BufferedReader(new FileReader("./SNLP2020_training.tsv"));
             String line = null;

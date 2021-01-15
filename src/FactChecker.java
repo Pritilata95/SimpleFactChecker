@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -17,10 +18,11 @@ public class FactChecker {
 	
 	protected Map<String, String[]> training_statement_map = new LinkedHashMap<>();
 	protected Map<String, String[]> test_statement_map = new LinkedHashMap<>();
-    protected Map<String, Boolean> training_statement_value = new LinkedHashMap<>();
+    protected Map<String, String> training_statement_value = new LinkedHashMap<>();
     private BufferedReader tsvReader;
     private StanfordCoreNLP pipeline;
     private String subject, object, predicate;
+    private FactClassifier classifier;
     
     public FactChecker() throws IOException{
     	try {
@@ -29,7 +31,7 @@ public class FactChecker {
             while((line = tsvReader.readLine()) != null){
                 String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
                 training_statement_map.put(lineItems[0], new String[]{lineItems[1]});
-                training_statement_value.put(lineItems[0], "1.0".equals(lineItems[2]));
+                training_statement_value.put(lineItems[0], lineItems[2]);
             }
             tsvReader = new BufferedReader(new FileReader("./SNLP2020_test.tsv"));
             line = null;
@@ -46,7 +48,7 @@ public class FactChecker {
         }
     }
     
-    public int[] findSubjectBoundary(String text) {
+    private int[] findSubjectBoundary(String text) {
         Pattern pattern = Pattern.compile("('s|')");
         Matcher matcher = pattern.matcher(text);
         int start_index = -1 , end_index = -1;
@@ -61,7 +63,7 @@ public class FactChecker {
         return new int[] {start_index, end_index};
     }
     
-    public String[] processData(String text){
+    private String[] processData(String text){
     	subject = "";
 		object = "";
 		predicate = "";
@@ -143,13 +145,32 @@ public class FactChecker {
     	Set<String> training_keys = training_statement_map.keySet();
     	FactSearcher FS = new FactSearcher();
     	for(String key : training_keys)
-    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
+    		FS.wikiSearcher(training_statement_map.get(key));
+//    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
     	System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
     	System.out.println("IO EXCEPTION :"+FS.ioe);
     	System.out.println("NULL POINTER EXCEPTION :"+FS.npe);
     }
     
-    public String findVerb(String text, boolean flag) {
+    public void trainClassifier() {
+    	classifier = new FactClassifier(new HashSet<>(training_statement_value.values()));
+    	Set<String> training_keys = training_statement_map.keySet();
+    	for(String id : training_keys) {
+    		String[] arr = training_statement_map.get(id);
+    		System.out.println(Arrays.toString(arr));
+    		try {
+    			classifier.learnExample(training_statement_value.get(id), arr[2] + " " + arr[3]);
+    		} catch (ArrayIndexOutOfBoundsException aiobex) {
+    			classifier.learnExample(training_statement_value.get(id), arr[2] + " " + " ");
+    		}
+    	}
+    }
+    
+    public String predictTruth(String text) {
+    	String factVal = classifier.classify(text);
+    	return factVal;
+    }
+    private String findVerb(String text, boolean flag) {
     	String verb = "";
     	int prevIndex = -1;
     	CoreDocument document = pipeline.processToCoreDocument(text); // create a document object

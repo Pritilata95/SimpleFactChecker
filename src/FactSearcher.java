@@ -31,24 +31,24 @@ public class FactSearcher {
 		subject = triplet[0];
 		object = triplet[1];
 		predicate = triplet[2];
-		wiki_predicate = "";
+		wiki_predicate = " ";
 		String page_id = null;
-		System.out.println("Subject: "+subject);
+//		System.out.println("Subject: "+subject);
 		String searchSubject = subject.replaceAll("\\s+", "%20");
 		try {
 			wikiSearch = new URL("https","en.wikipedia.org","/w/api.php?action=query&list=search&srsearch="+searchSubject+"&format=xml");
             page_id = findPage(wikiSearch.openStream());
             wiki_predicate = pageSearcher(page_id);
 		} catch (MalformedURLException e) {
-			System.out.println("URL MALFUNCTION DURING WIKI SEARCH OF "+subject);
+//			System.out.println("URL MALFUNCTION DURING WIKI SEARCH OF "+subject);
 			mfue += 1;
 //			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("IO EXCEPTION DURING WIKI SEARCH OF "+subject);
+//			System.out.println("IO EXCEPTION DURING WIKI SEARCH OF "+subject);
 			ioe += 1;
 //			e.printStackTrace();
 		} catch (NullPointerException e) {
-			System.out.println("NULL POINTER EXCEPTION DURING WIKI SEARCH OF "+subject);
+//			System.out.println("NULL POINTER EXCEPTION DURING WIKI SEARCH OF "+subject);
 			npe += 1;
 //			e.printStackTrace();
 		}
@@ -100,9 +100,9 @@ public class FactSearcher {
                 }
             }
 		} catch (MalformedURLException e) {
-			System.out.println("URL MALFUNCTION DURING INFORMATION FETCH");
+//			System.out.println("URL MALFUNCTION DURING INFORMATION FETCH");
 		} catch (IOException e) {
-			System.out.println("IO EXCEPTION DURING INFORMATION FETCH");
+//			System.out.println("IO EXCEPTION DURING INFORMATION FETCH");
 		}
 		return wikipedia_predicate;
 	}

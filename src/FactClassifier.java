@@ -36,8 +36,8 @@ public class FactClassifier {
 	
 	private List<String> preprocess(String text) {
     	List<String> tokens = new ArrayList<String>(); 
-    	String newtext = text.replaceAll("[^a-zA-Z0-9]"," ").toLowerCase();
-        newtext = newtext.replaceAll("[0-9]+", "#DIGIT");
+    	String newtext = text.replaceAll("[^a-zA-Z]"," ").toLowerCase();
+//        newtext = newtext.replaceAll("[0-9]+", "#DIGIT");
         String text_array[] = newtext.split("\\s+");
         tokens.addAll(Arrays.asList(text_array));
         for(int i=0; i < tokens.size(); i++){
@@ -69,46 +69,34 @@ public class FactClassifier {
     
     public String classify(String text) {
         String clazz = null;
-        // YOUR CODE HERE
         double intprob = Double.NEGATIVE_INFINITY;
-//        System.out.println("\t id : "+i);
         List<String> l = preprocess(text);
         Set<String> classez = classfrequency.keySet();
+        int total_class_occurence = 0;
+        total_class_occurence = classfrequency.keySet().stream().map(key -> classfrequency.get(key)).reduce(total_class_occurence, Integer::sum);
         for(String s : classez){ 
             double likelihood=0L;
             double classprob=0L;
             Map<String, Integer> wf = wordfrequency.get(s);
             int n = wf.values().stream().mapToInt(Integer :: intValue).sum();
-            //double nd = n; 
             int nk;
             for(String s1 : l){
                 try{
                     nk = wf.get(s1);
-//                    System.out.println(s1+" : "+nk);
                 }
                 catch(NullPointerException e){
                     nk = 0;
-//                    System.out.println(s1+" : "+nk);
                 }
-                
-                //double nkd = nk;
                 likelihood += Math.log((double)(nk+1)/(n+docVocab.size()));
-//                System.out.println("likelihood : " + likelihood);
             }
-//              classprob = likelihood;
-            classprob = Math.log(0.5)+likelihood;
-//            System.out.println(s+" : "+classprob);
-            
+            double classPrior = (double) classfrequency.get(s) / total_class_occurence;
+//            classprob = Math.log(0.5)+likelihood;
+            classprob = Math.log(classPrior)+likelihood; 
             if(classprob > intprob){
- //               System.out.println("ba "+clazz+" : "+intprob);
                 intprob = classprob; 
                 clazz = s;
-  //              System.out.println("aa "+clazz+" : "+intprob);
-
             }
-            
         }
- //       i++;
         return clazz;
     }
     

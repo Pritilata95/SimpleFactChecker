@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,10 +18,11 @@ import edu.stanford.nlp.pipeline.*;
 
 public class FactChecker {
 	
-	protected Map<String, String[]> training_statement_map = new LinkedHashMap<>();
-	protected Map<String, String[]> test_statement_map = new LinkedHashMap<>();
-    protected Map<String, String> training_statement_value = new LinkedHashMap<>();
+	private Map<String, String[]> training_statement_map = new LinkedHashMap<>();
+	private Map<String, String[]> test_statement_map = new LinkedHashMap<>();
+	private Map<String, String> training_statement_value = new LinkedHashMap<>();
     private BufferedReader tsvReader;
+    private BufferedWriter ttlWriter;
     private StanfordCoreNLP pipeline;
     private String subject, object, predicate;
     private FactClassifier classifier;
@@ -157,7 +160,7 @@ public class FactChecker {
     	Set<String> training_keys = training_statement_map.keySet();
     	for(String id : training_keys) {
     		String[] arr = training_statement_map.get(id);
-    		System.out.println(Arrays.toString(arr));
+//    		System.out.println(Arrays.toString(arr));
     		try {
     			classifier.learnExample(training_statement_value.get(id), arr[2] + " " + arr[3]);
     		} catch (ArrayIndexOutOfBoundsException aiobex) {
@@ -166,10 +169,26 @@ public class FactChecker {
     	}
     }
     
-    public String predictTruth(String text) {
-    	String factVal = classifier.classify(text);
-    	return factVal;
+    public void predictTruth() throws IOException {
+    	ttlWriter = new BufferedWriter(new  FileWriter("./output.ttl")); 
+    	Set<String> test_keys = test_statement_map.keySet();
+    	String factVal = null;
+    	String Fact_URI = "http://swc2017.aksw.org/task2/dataset/";
+    	String Prop_URI = "http://swc2017.aksw.org/hasTruthValue";
+    	String type = "http://www.w3.org/2001/XMLSchema#double";
+    	for(String id : test_keys) {
+    		String[] arr = test_statement_map.get(id);
+    		System.out.println(Arrays.toString(arr));
+    		try {
+    			factVal = classifier.classify(arr[2] + " " + arr[3]);
+    		} catch (ArrayIndexOutOfBoundsException aiobex) {
+    			factVal = classifier.classify(arr[2] + " " + " ");
+    		}
+    		ttlWriter.write("<"+Fact_URI+id+"><"+Prop_URI+">\""+factVal+"\"^^<"+type+">.\n");
+    	}
+    	ttlWriter.close();
     }
+    	
     private String findVerb(String text, boolean flag) {
     	String verb = "";
     	int prevIndex = -1;

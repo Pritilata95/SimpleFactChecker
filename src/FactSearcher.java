@@ -21,6 +21,7 @@ public class FactSearcher {
 	private DocumentBuilderFactory dbf;
 	private Document doc;
 	private String subject, object, predicate, wiki_predicate;
+	public int ioe, npe, mfue;
 	
 	FactSearcher(){
 		dbf = DocumentBuilderFactory.newInstance();
@@ -30,21 +31,25 @@ public class FactSearcher {
 		subject = triplet[0];
 		object = triplet[1];
 		predicate = triplet[2];
-		wiki_predicate = null;
+		wiki_predicate = "";
 		String page_id = null;
-		System.out.println(subject);
+		System.out.println("Subject: "+subject);
 		String searchSubject = subject.replaceAll("\\s+", "%20");
 		try {
 			wikiSearch = new URL("https","en.wikipedia.org","/w/api.php?action=query&list=search&srsearch="+searchSubject+"&format=xml");
             page_id = findPage(wikiSearch.openStream());
             wiki_predicate = pageSearcher(page_id);
 		} catch (MalformedURLException e) {
-			System.out.println(subject);
-			System.out.println("URL MALFUNCTION DURING WIKI SEARCH");
+			System.out.println("URL MALFUNCTION DURING WIKI SEARCH OF "+subject);
+			mfue += 1;
 //			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println(subject);
-			System.out.println("IO EXCEPTION DURING WIKI SEARCH");
+			System.out.println("IO EXCEPTION DURING WIKI SEARCH OF "+subject);
+			ioe += 1;
+//			e.printStackTrace();
+		} catch (NullPointerException e) {
+			System.out.println("NULL POINTER EXCEPTION DURING WIKI SEARCH OF "+subject);
+			npe += 1;
 //			e.printStackTrace();
 		}
 		return new String[] {subject, object, predicate, wiki_predicate};
@@ -87,9 +92,10 @@ public class FactSearcher {
             Matcher matcher = pattern.matcher(sb);
             while (matcher.find()){
             	String match = matcher.group(0);
-                System.out.println(match);
+//                System.out.println(match);
                 if(match.contains(object)) {
-                	wikipedia_predicate = match.split("=")[0].trim();
+                	wikipedia_predicate = match.split("=")[0];
+                	wikipedia_predicate = wikipedia_predicate.replaceAll("[^a-zA-Z]", " ").trim();
 //                	break;
                 }
             }

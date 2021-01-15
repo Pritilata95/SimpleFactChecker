@@ -18,7 +18,7 @@ public class FactChecker {
 	protected Map<String, String[]> training_statement_map = new LinkedHashMap<>();
 	protected Map<String, String[]> test_statement_map = new LinkedHashMap<>();
     protected Map<String, Boolean> training_statement_value = new LinkedHashMap<>();
-    private BufferedReader tsvReader, tsvReader1;
+    private BufferedReader tsvReader;
     private StanfordCoreNLP pipeline;
     private String subject, object, predicate;
     
@@ -26,22 +26,16 @@ public class FactChecker {
     	try {
     		tsvReader = new BufferedReader(new FileReader("./SNLP2020_training.tsv"));
             String line = null;
-//            int iteration = 0;
             while((line = tsvReader.readLine()) != null){
-            	/*if(iteration==0) {
-            		iteration++;
-            		continue;
-            	}*/
-            	
                 String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
                 training_statement_map.put(lineItems[0], new String[]{lineItems[1]});
                 training_statement_value.put(lineItems[0], "1.0".equals(lineItems[2]));
             }
-            tsvReader1 = new BufferedReader(new FileReader("./SNLP2020_test.tsv"));
-            String line1 = null;
-            while((line1 = tsvReader1.readLine()) != null){
-                String[] lineItems1 = line1.split("\t"); //splitting the line and adding its items in String[]
-                test_statement_map.put(lineItems1[0], new String[]{lineItems1[1]});
+            tsvReader = new BufferedReader(new FileReader("./SNLP2020_test.tsv"));
+            line = null;
+            while((line = tsvReader.readLine()) != null){
+                String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
+                test_statement_map.put(lineItems[0], new String[]{lineItems[1]});
             }
         } catch (FileNotFoundException ex) {
             System.out.println("FILES NOT FOUND");
@@ -49,23 +43,8 @@ public class FactChecker {
         	System.out.println("IO EXCEPTION");
         } finally {
         	tsvReader.close();
-        	tsvReader1.close();
         }
     }
-    
-/*  // Tokenizer 
- 	public String[] tokenize(String text){
-    	List<String> tokens = new ArrayList<String>(); 
-	    String newtext = text.replaceAll("[^a-zA-Z0-9()']"," ");
-	    String text_array[] = newtext.split(" ");
-	    for(int i = 0; i<text_array.length; i++){
-	    	if (text_array[i].isEmpty()) continue;
-	        else if (text_array[i].matches("\\s+")) continue;
-	        tokens.addAll(Arrays.asList(text_array[i].split("\\s+")));
-	            
-	        }
-    	 return tokens.stream().toArray(String[]::new);
-    }//end*/
     
     public int[] findSubjectBoundary(String text) {
         Pattern pattern = Pattern.compile("('s|')");
@@ -149,8 +128,7 @@ public class FactChecker {
     	// set up pipeline properties
         Properties props = new Properties();
         // set the list of annotators to run
-        props.setProperty("annotators", "tokenize,ssplit,pos,lemma");
-        //props.setProperty("ner.fine.regexner.ignorecase", "true");
+        props.setProperty("annotators", "tokenize,ssplit,pos");
         // build pipeline
         pipeline = new StanfordCoreNLP(props);
     	Set<String> training_keys = training_statement_map.keySet();
@@ -159,6 +137,16 @@ public class FactChecker {
 	    	 training_statement_map.put(key, processData(training_statement_map.get(key)[0]));
 	    for(String key : test_keys)
 	    	test_statement_map.put(key, processData(test_statement_map.get(key)[0]));
+    }
+    
+    public void searchWiki() {
+    	Set<String> training_keys = training_statement_map.keySet();
+    	FactSearcher FS = new FactSearcher();
+    	for(String key : training_keys)
+    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
+    	System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
+    	System.out.println("IO EXCEPTION :"+FS.ioe);
+    	System.out.println("NULL POINTER EXCEPTION :"+FS.npe);
     }
     
     public String findVerb(String text, boolean flag) {

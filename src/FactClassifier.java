@@ -9,95 +9,92 @@ import java.util.Set;
 
 public class FactClassifier {
 	
-	private Set<String> docVocab;
-	private Map<String, Integer>  classfrequency;
-	private Map<String, Map<String, Integer>> wordfrequency;
-	private final Set<String> stopwords = new HashSet<>(Arrays.asList("i","me","my","myself","we","our","ours","ourselves","you","your","yours",
-		    "yourself","yourselves","he","him","his","himself","she","her","hers","herself","it","its","itself","they","them",
-		    "their","theirs","themselves","what","which","who","whom","this","that","these","those","am","is","are","was",
-		    "were","be","been","being","have","has","had","having","do","does","did","doing","a","an","the","and","but","if",
-		    "or","because","as","until","while","of","at","by","for","with","about","against","between","into","through",
-		    "during","before","after","above","below","to","from","up","down","in","out","on","off","over","under","again",
-		    "further","then","once","here","there","when","where","why","how","all","any","both","each","few","more","most",
-		    "other","some","such","no","nor","not","only","own","same","so","than","too","very","s","t","can","will","just",
-		    "don","should","now","place"));
-	
-	public FactClassifier (Set<String> classes) {
-		classfrequency = new HashMap<String, Integer>();
-		wordfrequency = new HashMap<String, Map<String, Integer>>();
-		docVocab = new HashSet<String>();
-        Iterator<String> it = classes.iterator();
-        while (it.hasNext()) {
-            String item = it.next().toString();
-            classfrequency.put(item, 0);
-            wordfrequency.put(item, new HashMap<String, Integer>());
-        }
-	}
+	Set <String> vocabulary = new HashSet<String>();
+	private Map<String, Double> trigramFreqTable=new HashMap();
+    private Map<String, Double> bigramFreqTable = new HashMap();
+    private final Set<String> stopwords = new HashSet<>(Arrays.asList("i","me","my","myself","we","our","ours","ourselves","you","your","yours",
+	    "yourself","yourselves","he","him","his","himself","she","her","hers","herself","it","its","itself","they","them",
+	    "their","theirs","themselves","what","which","who","whom","this","that","these","those","am","is","are","was",
+	    "were","be","been","being","have","has","had","having","do","does","did","doing","a","an","the","and","but","if",
+	    "or","because","as","until","while","of","at","by","for","with","about","against","between","into","through",
+	    "during","before","after","above","below","to","from","up","down","in","out","on","off","over","under","again",
+	    "further","then","once","here","there","when","where","why","how","all","any","both","each","few","more","most",
+	    "other","some","such","no","nor","not","only","own","same","so","than","too","very","s","t","can","will","just",
+	    "don","should","now"));
 	
 	private List<String> preprocess(String text) {
-    	List<String> tokens = new ArrayList<String>(); 
-    	String newtext = text.replaceAll("[^a-zA-Z]"," ").toLowerCase();
-//        newtext = newtext.replaceAll("[0-9]+", "#DIGIT");
-        String text_array[] = newtext.split("\\s+");
-        tokens.addAll(Arrays.asList(text_array));
-        for(int i=0; i < tokens.size(); i++){
-            if(stopwords.contains(tokens.get(i))){
-                tokens.remove(tokens.get(i));
-            }
-                
-        }
-    	return tokens; 
-    }
+		List<String> tokens = new ArrayList<String>(); 
+		String newtext = text.replaceAll("[^a-zA-Z0-9]"," ").toLowerCase();
+	    //newtext = newtext.replaceAll("[0-9]+", "#DIGIT");
+	    String text_array[] = newtext.split("\\s+");
+	    tokens.addAll(Arrays.asList(text_array));
+	    for(int i=0; i < tokens.size(); i++){
+	        if(stopwords.contains(tokens.get(i))){
+	            tokens.remove(tokens.get(i));
+	        }
+	            
+	    }
+		return tokens; 
+	}
 	
-    public void learnExample(String clazz, String text) {   	
-        List<String> words = preprocess(text);
-        int val = (classfrequency.get(clazz)) +1;
-        classfrequency.put(clazz, val);
-        Map <String, Integer> wf = wordfrequency.get(clazz);
-        for(String w : words){
-            if(!wf.containsKey(w))
-                wf.put(w, 1);
+    protected void learner(String text){
+        double val=0.0;
+        List<String> tokens = preprocess(text);
+        if(tokens.size()>2) {
+            String trigramkey = tokens.get(0)+" "+tokens.get(1)+" "+tokens.get(2);
+            String bigramkey = tokens.get(0)+" "+tokens.get(1);
+            if(trigramFreqTable.containsKey(trigramkey)){
+                val=trigramFreqTable.get(trigramkey)+1.0;
+                trigramFreqTable.put(trigramkey, val);
+            }
             else{
-                int valw = (wf.get(w))+1;
-                    wf.put(w, valw);
+                trigramFreqTable.put(trigramkey, 1.0);
+            }
+            
+            if(bigramFreqTable.containsKey(bigramkey)){
+                val=bigramFreqTable.get(bigramkey)+1.0;
+                bigramFreqTable.put(bigramkey, val);
+            }
+            else{
+                bigramFreqTable.put(bigramkey, 1.0);
+            }
+            vocabulary.addAll(tokens);
+        }
+
+   }
+	
+    protected String trigrampredictor(String text){
+        //System.out.println(text);
+        List<String> tokens = preprocess(text);
+        String result= new String();
+        Double trueprobab=0.0;
+        Double falseprobab=0.0; 
+        if(tokens.size()<2){
+            result="false";
+        }
+        else{
+            //for(String m : trigramFreqTable.keySet()){
+            //System.out.println(m + "\t"+ trigramFreqTable.get(m));}
+            String bigramkey = tokens.get(0)+" "+tokens.get(1);
+            Double bicount= bigramFreqTable.get(bigramkey);
+            Double falsecount= trigramFreqTable.get(bigramkey+" "+"false");
+            Double truecount= trigramFreqTable.get(bigramkey+" "+"true");
+            if(bicount==null) bicount=0.0;
+            if(falsecount==null) falsecount = 0.0;
+            if(truecount==null) truecount=0.0;
+            falseprobab=( falsecount +1.0)/(bicount+vocabulary.size()); 
+            //System.out.println(falseprobab); 
+            trueprobab=(truecount+1.0)/(bicount +vocabulary.size()); 
+            //System.out.println(trueprobab);
+            if(trueprobab>falseprobab){ 
+                result="true";
+            }
+            else{ 
+                result="false";
             }
         }
-        for(String m : wordfrequency.keySet()){
-            docVocab.addAll(wordfrequency.get(m).keySet());
-        }
-    }
-    
-    public String classify(String text) {
-        String clazz = null;
-        double intprob = Double.NEGATIVE_INFINITY;
-        List<String> l = preprocess(text);
-        Set<String> classez = classfrequency.keySet();
-//        int total_class_occurence = 0;
-//        total_class_occurence = classfrequency.keySet().stream().map(key -> classfrequency.get(key)).reduce(total_class_occurence, Integer::sum);
-        for(String s : classez){ 
-            double likelihood=0L;
-            double classprob=0L;
-            Map<String, Integer> wf = wordfrequency.get(s);
-            int n = wf.values().stream().mapToInt(Integer :: intValue).sum();
-            int nk;
-            for(String s1 : l){
-                try{
-                    nk = wf.get(s1);
-                }
-                catch(NullPointerException e){
-                    nk = 0;
-                }
-                likelihood += Math.log((double)(nk+1)/(n+docVocab.size()));
-            }
-//            double classPrior = (double) classfrequency.get(s) / total_class_occurence;
-            classprob = Math.log(0.5)+likelihood;
-//            classprob = Math.log(classPrior)+likelihood; 
-            if(classprob > intprob){
-                intprob = classprob; 
-                clazz = s;
-            }
-        }
-        return clazz;
-    }
+        return result;
+    }   
+ 
     
 }

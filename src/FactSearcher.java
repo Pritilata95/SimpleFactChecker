@@ -28,9 +28,9 @@ public class FactSearcher {
 	}
 	
 	public String[] wikiSearcher(String[] triplet){
-		subject = triplet[0];
-		object = triplet[1];
-		predicate = triplet[2];
+		subject = triplet[0].trim();
+		object = triplet[1].trim();
+		predicate = triplet[2].trim().split("\\s+")[0];
 		wiki_predicate = " ";
 		String page_id = null;
 //		System.out.println("Subject: "+subject);
@@ -38,7 +38,7 @@ public class FactSearcher {
 		try {
 			wikiSearch = new URL("https","en.wikipedia.org","/w/api.php?action=query&list=search&srsearch="+searchSubject+"&format=xml");
             page_id = findPage(wikiSearch.openStream());
-            wiki_predicate = pageSearcher(page_id);
+            wiki_predicate = pageSearcher(page_id).trim().split("\\s+")[0];
 		} catch (MalformedURLException e) {
 //			System.out.println("URL MALFUNCTION DURING WIKI SEARCH OF "+subject);
 			mfue += 1;
@@ -51,8 +51,10 @@ public class FactSearcher {
 //			System.out.println("NULL POINTER EXCEPTION DURING WIKI SEARCH OF "+subject);
 			npe += 1;
 //			e.printStackTrace();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			wiki_predicate = " ";
 		}
-		return new String[] {subject, object, predicate, wiki_predicate};
+		return new String[] {subject, object, predicate.split("\\s+")[0], wiki_predicate};
 	}
 	
 	private String findPage(InputStream xml) { 

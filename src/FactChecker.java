@@ -34,7 +34,7 @@ public class FactChecker {
             while((line = tsvReader.readLine()) != null){
                 String[] lineItems = line.split("\t"); //splitting the line and adding its items in String[]
                 training_statement_map.put(lineItems[0], new String[]{lineItems[1]});
-                training_statement_value.put(lineItems[0], lineItems[2]);
+                training_statement_value.put(lineItems[0], String.valueOf("1.0".equals(lineItems[2])));
             }
             tsvReader = new BufferedReader(new FileReader("./SNLP2020_test.tsv"));
             line = null;
@@ -145,30 +145,30 @@ public class FactChecker {
     }
     
     public void searchWiki() {
-        Set<String> training_keys = training_statement_map.keySet();
-        Set<String> test_keys = test_statement_map.keySet();
-        FactSearcher FS = new FactSearcher();
-        for(String key : training_keys)
-        	training_statement_map.put(key, FS.wikiSearcher(training_statement_map.get(key)));
-//        	System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
-        for(String key : test_keys)
-        	test_statement_map.put(key, FS.wikiSearcher(test_statement_map.get(key)));
-//        	System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(test_statement_map.get(key))));
-        System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
-        System.out.println("IO EXCEPTION :"+FS.ioe);
-        System.out.println("NULL POINTER EXCEPTION :"+FS.npe);
-        }
+    	Set<String> training_keys = training_statement_map.keySet();
+    	Set<String> test_keys = test_statement_map.keySet();
+    	FactSearcher FS = new FactSearcher();
+    	for(String key : training_keys)
+    		training_statement_map.put(key, FS.wikiSearcher(training_statement_map.get(key)));
+//    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
+    	for(String key : test_keys)
+    		test_statement_map.put(key, FS.wikiSearcher(test_statement_map.get(key)));
+//    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
+    	System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
+    	System.out.println("IO EXCEPTION :"+FS.ioe);
+    	System.out.println("NULL POINTER EXCEPTION :"+FS.npe);
+    }
     
     public void trainClassifier() {
-    	classifier = new FactClassifier(new HashSet<>(training_statement_value.values()));
+    	classifier = new FactClassifier();
     	Set<String> training_keys = training_statement_map.keySet();
     	for(String id : training_keys) {
     		String[] arr = training_statement_map.get(id);
 //    		System.out.println(Arrays.toString(arr));
     		try {
-    			classifier.learnExample(training_statement_value.get(id), arr[2] + " " + arr[3]);
+    			classifier.learner(arr[2] + " " + arr[3] + " " + training_statement_value.get(id));
     		} catch (ArrayIndexOutOfBoundsException aiobex) {
-    			classifier.learnExample(training_statement_value.get(id), arr[2] + " " + " ");
+    			classifier.learner(arr[2] + " " + " " + " " + training_statement_value.get(id));
     		}
     	}
     }
@@ -184,10 +184,12 @@ public class FactChecker {
     		String[] arr = test_statement_map.get(id);
 //    		System.out.println(Arrays.toString(arr));
     		try {
-    			factVal = classifier.classify(arr[2] + " " + arr[3]);
+    			factVal = classifier.trigrampredictor(arr[2] + " " + arr[3]);
     		} catch (ArrayIndexOutOfBoundsException aiobex) {
-    			factVal = classifier.classify(arr[2] + " " + " ");
+    			factVal = classifier.trigrampredictor(arr[2] + " " + " ");
     		}
+    		if(factVal.equalsIgnoreCase("TRUE")) factVal = "1.0";
+    		else if(factVal.equalsIgnoreCase("FALSE")) factVal = "0.0";
     		ttlWriter.write("<"+Fact_URI+id+"><"+Prop_URI+">\""+factVal+"\"^^<"+type+">.\n");
     	}
     	ttlWriter.close();

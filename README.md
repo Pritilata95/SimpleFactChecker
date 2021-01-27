@@ -20,3 +20,9 @@ The program is designed to run with JDK 8 and above.
 2. &gt; cd SimpleFactChecker
 3. &gt; javac -cp "./lib/\*;./src/\*" ./src/\*.java
 4. &gt; java -cp "./lib/\*;./src" Main
+
+* For Linux Users - 
+1. $ git clone https://github.com/Pritilata95/SimpleFactChecker
+2. $ cd SimpleFactChecker
+3. $ javac -cp "./lib/\*:./src/\*" ./src/\*.java
+4. $ java -cp "./lib/\*:./src" Main

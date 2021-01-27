@@ -2,16 +2,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class FactClassifier {
 	
-	Set <String> vocabulary = new HashSet<String>();
-	private Map<String, Double> trigramFreqTable=new HashMap();
-    private Map<String, Double> bigramFreqTable = new HashMap();
+	private Set <String> vocabulary = new HashSet<String>();
+	private Map<String, Double> trigramFreqTable=new HashMap<String, Double>();
+    private Map<String, Double> bigramFreqTable = new HashMap<String, Double>();
     private final Set<String> stopwords = new HashSet<>(Arrays.asList("i","me","my","myself","we","our","ours","ourselves","you","your","yours",
 	    "yourself","yourselves","he","him","his","himself","she","her","hers","herself","it","its","itself","they","them",
 	    "their","theirs","themselves","what","which","who","whom","this","that","these","those","am","is","are","was",

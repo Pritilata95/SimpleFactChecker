@@ -42,14 +42,20 @@ public class FactSearcher {
 		} catch (MalformedURLException e) {
 //			System.out.println("URL MALFUNCTION DURING WIKI SEARCH OF "+subject);
 			mfue += 1;
+//			System.out.println(wiki_predicate);
 //			e.printStackTrace();
 		} catch (IOException e) {
 //			System.out.println("IO EXCEPTION DURING WIKI SEARCH OF "+subject);
 			ioe += 1;
+			/*System.out.println(subject);
+			System.out.println(object);
+			System.out.println(predicate);
+			System.out.println(wiki_predicate);*/
 //			e.printStackTrace();
 		} catch (NullPointerException e) {
 //			System.out.println("NULL POINTER EXCEPTION DURING WIKI SEARCH OF "+subject);
 			npe += 1;
+//			System.out.println(wiki_predicate);
 //			e.printStackTrace();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			wiki_predicate = " ";
@@ -90,7 +96,7 @@ public class FactSearcher {
             in.close();
 //            System.out.println(sb);
             String regex = "(?U)\\w+\\s+=\\s+\\w*\\s*(\\{{2}[\\w\\s|]*)*(\\**\\s*\\[{2}[\\w\\s-'|\\(\\),]*\\]{2}\\s*)+([\\w\\s|]*\\}{2})*([,\\w\\s]*)*";
-            Pattern pattern = Pattern.compile(regex, Pattern.UNICODE_CHARACTER_CLASS);
+            Pattern pattern = Pattern.compile(regex, Pattern.UNICODE_CHARACTER_CLASS | Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(sb);
             while (matcher.find()){
             	String match = matcher.group(0);

@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -154,9 +153,9 @@ public class FactChecker {
     	for(String key : test_keys)
     		test_statement_map.put(key, FS.wikiSearcher(test_statement_map.get(key)));
 //    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
-    	System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
+    	/*System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
     	System.out.println("IO EXCEPTION :"+FS.ioe);
-    	System.out.println("NULL POINTER EXCEPTION :"+FS.npe);
+    	System.out.println("NULL POINTER EXCEPTION :"+FS.npe);*/
     }
     
     public void trainClassifier() {
@@ -240,6 +239,7 @@ public class FactChecker {
 //        		System.out.println(String.format("%s\t%s\t%s\t%d", tok.word(), tok.lemma(), tok.tag(), tok.index()));
         		}
     	}
+//    	System.out.println(verb);
     	return verb.trim();
     }
 }

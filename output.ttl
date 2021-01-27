@@ -19,7 +19,7 @@
 <http://swc2017.aksw.org/task2/dataset/3811791><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3482852><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3316015><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3319522><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3319522><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3860715><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3287859><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3260115><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -137,7 +137,7 @@
 <http://swc2017.aksw.org/task2/dataset/3819097><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/4310580><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3220734><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3810285><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3810285><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3423642><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3213306><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3613471><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -178,7 +178,7 @@
 <http://swc2017.aksw.org/task2/dataset/3244964><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3432519><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3313388><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3689099><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3689099><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3314220><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/4361321><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3687900><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -238,7 +238,7 @@
 <http://swc2017.aksw.org/task2/dataset/3879388><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3803332><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3847152><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3806604><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3806604><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3886918><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3848006><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3880130><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -325,7 +325,7 @@
 <http://swc2017.aksw.org/task2/dataset/3815598><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3860163><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3221320><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3816447><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3816447><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3818866><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3290103><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/4316102><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -500,7 +500,7 @@
 <http://swc2017.aksw.org/task2/dataset/3845615><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3343592><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3317065><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3614659><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3614659><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3483547><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3832772><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3854320><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -584,7 +584,7 @@
 <http://swc2017.aksw.org/task2/dataset/3482445><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3610289><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3228825><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3615976><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3615976><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3488192><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3874373><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3223380><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -876,7 +876,7 @@
 <http://swc2017.aksw.org/task2/dataset/3414184><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3883587><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3327687><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3441128><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3441128><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3415039><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3418549><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3815655><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -1048,7 +1048,7 @@
 <http://swc2017.aksw.org/task2/dataset/3838331><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3837483><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3819616><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/3621441><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/3621441><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3620110><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3414226><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3879928><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
@@ -1248,12 +1248,12 @@
 <http://swc2017.aksw.org/task2/dataset/3441816><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3312508><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3622144><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/4323614><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/4323614><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3800835><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3205205><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3376516><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3668997><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
-<http://swc2017.aksw.org/task2/dataset/4306465><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
+<http://swc2017.aksw.org/task2/dataset/4306465><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3895197><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3320313><http://swc2017.aksw.org/hasTruthValue>"1.0"^^<http://www.w3.org/2001/XMLSchema#double>.
 <http://swc2017.aksw.org/task2/dataset/3842026><http://swc2017.aksw.org/hasTruthValue>"0.0"^^<http://www.w3.org/2001/XMLSchema#double>.

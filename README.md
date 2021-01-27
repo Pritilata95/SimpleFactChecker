@@ -13,3 +13,10 @@ The program is designed to run with JDK 8 and above.
 * FactChecker.java makes <Subject, Object, Predicate> triplet and handles the other classes
 * FactSearcher.java takes a triplet, performs web search for the given subject and returns matching predicate for the provided object, if available. 
 * FactClassifier.java assigns a truth-value to a fact by matching provided predicate and web predicate. 
+
+# Steps to Execute
+* For Windows Users - 
+1. &gt; git clone https://github.com/Pritilata95/SimpleFactChecker
+2. &gt; cd SimpleFactChecker
+3. &gt; javac -cp "./lib/\*;./src/\*" ./src/\*.java
+4. &gt; java -cp "./lib/\*;./src" Main

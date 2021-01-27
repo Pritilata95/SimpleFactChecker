@@ -4,6 +4,7 @@ Goal : Build a corpus-driven fact-checking engine, which returns a veracity valu
 
 While running this program, be sure to include the provided jar files in classpath. 
 If you want, you can change training and test filenames in FactChecker.java
+The program is designed to run with JDK 8 and above. 
 
 # Role of each file
 * Main.java is the entry point of the program 

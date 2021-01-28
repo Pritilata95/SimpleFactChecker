@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import edu.stanford.nlp.ling.*;
 import edu.stanford.nlp.pipeline.*;
+import edu.stanford.nlp.util.logging.RedwoodConfiguration;
 
 public class FactChecker {
 	
@@ -27,6 +28,7 @@ public class FactChecker {
     private FactClassifier classifier;
     
     public FactChecker() throws IOException{
+    	RedwoodConfiguration.current().clear().apply();
     	try {
     		tsvReader = new BufferedReader(new FileReader("./SNLP2020_training.tsv"));
             String line = null;
@@ -152,7 +154,7 @@ public class FactChecker {
 //    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
     	for(String key : test_keys)
     		test_statement_map.put(key, FS.wikiSearcher(test_statement_map.get(key)));
-//    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(training_statement_map.get(key))));
+//    		System.out.println(key+"\t"+Arrays.toString(FS.wikiSearcher(test_statement_map.get(key))));
     	/*System.out.println("MALFORMED URL EXCEPTION :"+FS.mfue);
     	System.out.println("IO EXCEPTION :"+FS.ioe);
     	System.out.println("NULL POINTER EXCEPTION :"+FS.npe);*/
@@ -216,8 +218,7 @@ public class FactChecker {
     					prevIndex = tok.index();
     				}
     			}	
-//        		System.out.println(String.format("%s\t%s\t%s\t%d", tok.word(), tok.lemma(), tok.tag(), tok.index()));
-        		}
+        	}
     	}
     	if(flag){
     		String[] values = {"VB","VBD","VBZ","VBP","VBN","NNS"};
@@ -236,8 +237,7 @@ public class FactChecker {
     					prevIndex = tok.index();
     				}
     			}	
-//        		System.out.println(String.format("%s\t%s\t%s\t%d", tok.word(), tok.lemma(), tok.tag(), tok.index()));
-        		}
+        	}
     	}
 //    	System.out.println(verb);
     	return verb.trim();

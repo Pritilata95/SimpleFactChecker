@@ -24,7 +24,6 @@ public class FactClassifier {
 	private List<String> preprocess(String text) {
 		List<String> tokens = new ArrayList<String>(); 
 		String newtext = text.replaceAll("[^a-zA-Z0-9]"," ").toLowerCase();
-	    //newtext = newtext.replaceAll("[0-9]+", "#DIGIT");
 	    String text_array[] = newtext.split("\\s+");
 	    tokens.addAll(Arrays.asList(text_array));
 	    for(int i=0; i < tokens.size(); i++){

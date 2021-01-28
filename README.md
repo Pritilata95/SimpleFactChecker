@@ -18,11 +18,17 @@ The program is designed to run with JDK 8 and above.
 * For Windows Users - 
 1. &gt; git clone https://github.com/Pritilata95/SimpleFactChecker
 2. &gt; cd SimpleFactChecker
-3. &gt; javac -cp "./lib/\*;./src/\*" ./src/\*.java
-4. &gt; java -cp "./lib/\*;./src" Main
+3. &gt; javac -cp "./lib/\*;./src/\*" -d bin ./src/\*.java
+4. &gt; java -cp "./lib/\*;./bin" Main
 
 * For Linux Users - 
 1. $ git clone https://github.com/Pritilata95/SimpleFactChecker
 2. $ cd SimpleFactChecker
-3. $ javac -cp "./lib/\*:./src/\*" ./src/\*.java
-4. $ java -cp "./lib/\*:./src" Main
+3. $ javac -cp "./lib/\*:./src/\*" -d bin ./src/\*.java
+4. $ java -cp "./lib/\*:./bin" Main
+
+# Diagrams
+<p float="left">
+  <img src="ClassDiagram.jpeg" alt="Class Diagram of SimpleFactChecker application" width="450"/>
+  <img src="SequenceDiagram.jpeg" alt="Sequence Diagram of SimpleFactChecker application" width="450"/>
+</p>

@@ -1,6 +1,6 @@
 # Simple Fact Checker
 
-Goal : Build a corpus-driven fact-checking engine, which returns a veracity value between -1 (fact is false) and +1 (fact is true) given a fact from DBpedia.
+Goal : Build a corpus-driven fact-checking engine, which returns a veracity value between 0 (fact is false) and +1 (fact is true) given a fact from Wikipedia.
 
 While running this program, be sure to include the provided jar files in classpath. 
 
